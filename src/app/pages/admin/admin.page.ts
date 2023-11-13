@@ -13,6 +13,7 @@ import { NodeJsExpressService } from 'src/app/services/node-js-express-service/n
 export class AdminPage implements OnInit {
 
   recipes: Recipe[] = [];
+  filteredRecipes: Recipe[] = [];
 
   constructor(private modalCtrl: ModalController, private nodeJsExpressService: NodeJsExpressService) {}
 
@@ -23,12 +24,21 @@ export class AdminPage implements OnInit {
   getRecipies() {
     this.nodeJsExpressService.getAll().subscribe((data) => {
       this.recipes = data;
+      this.filteredRecipes = data; // Initially display all recipes
       console.log(this.recipes);
     },
     error =>{
       console.log(error);
     });
   }
+
+  filterRecipes(event: any) {
+    const searchTerm = (event.detail.value || '').toLowerCase(); // Getting the search term
+    this.filteredRecipes = this.recipes.filter(recipe =>
+      recipe.name && recipe.name.toLowerCase().includes(searchTerm)
+    );
+  }
+
 
   async create() {
     const modal = await this.modalCtrl.create({
