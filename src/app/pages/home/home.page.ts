@@ -12,6 +12,8 @@ import {
 } from '@angular/animations';
 import { HttpClient } from '@angular/common/http';
 import { DishDetailsModalPage } from 'src/app/modals/dish-details-modal/dish-details-modal.page';
+import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
+import { Recipe } from 'src/app/models/recipe.model';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +42,8 @@ export class HomePage {
   recipeIngredients: any[] = [];
   ingredients: string[] = []; // All available ingredients
   filteredIngredients: string[] = []; // Ingredients that match the user's input
-
+  recipes: Recipe[] = [];
+  
   constructor(
     private navCtrl: NavController,
     private mealService: MealService,
@@ -48,7 +51,8 @@ export class HomePage {
     private authService: AuthService,
     private toastController: ToastController,
     private http: HttpClient,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private nodeJsExpressService: NodeJsExpressService
   ) {}
 
   ngOnInit() {
@@ -63,6 +67,18 @@ export class HomePage {
     });  
     this.latestmeal();
     this.randomMeals();
+  }
+
+
+  getRecipies() {
+    this.nodeJsExpressService.getAll().subscribe(
+      (data) => {
+        this.recipes = data;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   async dishDetailsModal(meal: any) {
@@ -247,6 +263,40 @@ export class HomePage {
     } else if (strCategory === 'Vegan') {
       return 'assets/icon/leaf.svg';
     } else if (strCategory === 'Vegetarian') {
+      return 'assets/icon/leaf.svg';
+    }
+
+    return 'assets/icon/miscellaneous.svg';
+  }
+
+  getCategoryIconTwo(category: string | undefined) {
+    if (category === 'Beef') {
+      return 'assets/icon/cow.svg';
+    } else if (category === 'Breakfast') {
+      return 'assets/icon/breakfast.svg';
+    } else if (category === 'Chicken') {
+      return 'assets/icon/chicken.svg';
+    } else if (category === 'Dessert') {
+      return 'assets/icon/dessert.svg';
+    } else if (category === 'Goat') {
+      return 'assets/icon/goat.svg';
+    } else if (category === 'Lamb') {
+      return 'assets/icon/lamb.svg';
+    } else if (category === 'Miscellaneous') {
+      return 'assets/icon/miscellaneous.svg';
+    } else if (category === 'Pasta') {
+      return 'assets/icon/pasta.svg';
+    } else if (category === 'Pork') {
+      return 'assets/icon/pig.svg';
+    } else if (category === 'Seafood') {
+      return 'assets/icon/seafood.svg';
+    } else if (category === 'Side') {
+      return 'assets/icon/miscellaneous.svg';
+    } else if (category === 'Starter') {
+      return 'assets/icon/miscellaneous.svg';
+    } else if (category === 'Vegan') {
+      return 'assets/icon/leaf.svg';
+    } else if (category === 'Vegetarian') {
       return 'assets/icon/leaf.svg';
     }
 

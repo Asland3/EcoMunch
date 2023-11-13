@@ -385,6 +385,22 @@
           </swiper-slide>
         </swiper-container>
       </ion-grid>
+
+      <div class="page-container">
+        <h2>Your meals</h2>
+        <ion-card *ngFor="let recipe of recipes">
+          <ion-img [src]="recipe.image" class="dish-img"></ion-img>
+
+          <h3 class="ion-text-center">{{ recipe.name }}</h3>
+          <div class="category">
+            <ion-label>{{ recipe.category}}</ion-label>
+            <ion-icon
+              style="margin-top: 15px"
+              [src]="getCategoryIconTwo(recipe.category)"
+            ></ion-icon>
+          </div>
+        </ion-card>
+      </div>
     </div>
   </div>
 </ion-content>
