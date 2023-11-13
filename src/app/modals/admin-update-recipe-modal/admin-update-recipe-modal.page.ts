@@ -42,14 +42,15 @@ export class AdminUpdateRecipeModalPage implements OnInit {
   closeModal() {
     this.modalCtrl.dismiss();
   }
+
   async openGallery() {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.Base64,
+      resultType: CameraResultType.Uri,
       source: CameraSource.Photos,
     });
-    this.editedRecipe.image = 'data:image/jpeg;base64,' + image.base64String;
+    this.editedRecipe.image = image.webPath;
   }
 
 

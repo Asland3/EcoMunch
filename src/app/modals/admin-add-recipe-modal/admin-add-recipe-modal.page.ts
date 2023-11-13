@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import {
   animate,
   state,
@@ -28,16 +28,19 @@ export class AdminAddRecipeModalPage implements OnInit {
   addedIngredients: string[] = [];
   isSearchBarFocused = false;
   recipe: Recipe;
+  recipes: Recipe[] = [];
 
   constructor(
     private modalCtrl: ModalController,
-    private nodeJsExpressService: NodeJsExpressService
+    private nodeJsExpressService: NodeJsExpressService,
+    private toastController: ToastController
   ) {
     this.recipe = new Recipe();
   }
 
   ngOnInit() {
     this.recipe = new Recipe();
+    this.refreshRecipes();
   }
 
   closeModal() {
@@ -48,10 +51,10 @@ export class AdminAddRecipeModalPage implements OnInit {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.Base64,
+      resultType: CameraResultType.Uri,
       source: CameraSource.Photos,
     });
-    this.recipe.image = 'data:image/jpeg;base64,' + image.base64String;
+    this.recipe.image = image.webPath;
   }
 
   onSearchBarFocus() {
@@ -67,15 +70,36 @@ export class AdminAddRecipeModalPage implements OnInit {
     this.addedIngredients.splice(index, 1);
   }
 
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+    });
+    toast.present();
+  }
+
   addNewRecipe() {
     this.nodeJsExpressService.create(this.recipe).subscribe(
       (data) => {
-        console.log('Recipe added successfully');
+        this.showToast('Recipe added successfully');
+        this.refreshRecipes();
+      },
+      (error) => {
+        console.log(error);
+        this.showToast('An error occurred when trying to add a new recipe');
+      }
+    );
+    this.modalCtrl.dismiss(this.recipe);
+  }
+
+  refreshRecipes() {
+    this.nodeJsExpressService.getAll().subscribe(
+      (data) => {
+        this.recipes = data; 
       },
       (error) => {
         console.log(error);
       }
     );
-    this.modalCtrl.dismiss();
   }
 }

@@ -41,10 +41,15 @@ export class AdminPage implements OnInit {
     });
 
     await modal.present();
+    
+    const { data } = await modal.onWillDismiss();  // Få det opdaterede recipe objekt
+    if (data) {
+      const index = this.recipes.findIndex(r => r.id === data.id);  // Find indexet for det opdaterede recipe objekt i recipes arrayet
+      this.recipes[index] = data;  // Opdater det relevante objekt i recipes arrayet
+    }
   }
 
   async update(recipe: any) {
-    console.log("this is recipe", recipe);
     const modal = await this.modalCtrl.create({
       component: AdminUpdateRecipeModalPage,
       cssClass: 'admin-modal',
