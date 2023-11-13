@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize('ecomunchdb', 'root', 'Kranors_Syrlok10', {
+// Rember to change the password to your own password
+const sequelize = new Sequelize('ecomunchdb', 'root', '', {
   host: "localhost",
   dialect: "mysql",
   port: 3306
