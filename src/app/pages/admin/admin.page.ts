@@ -17,10 +17,10 @@ export class AdminPage implements OnInit {
   constructor(private modalCtrl: ModalController, private nodeJsExpressService: NodeJsExpressService) {}
 
   ngOnInit() {
-    this.getRecipies();
+    this.getRecipe();
   }
 
-  getRecipies() {
+  getRecipe() {
     this.nodeJsExpressService.getAll().subscribe((data) => {
       this.recipes = data;
       console.log(this.recipes);
