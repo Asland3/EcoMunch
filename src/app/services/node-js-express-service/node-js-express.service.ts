@@ -40,4 +40,9 @@ export class NodeJsExpressService {
   findByName(name: any): Observable<Recipe[]> { 
     return this.http.get<Recipe[]>(`${baseUrl}?name=${name}`);
   }
+
+  login(username: string, password: string): Observable<any> {
+    return this.http.post('http://localhost:8080/api/user/login', { username, password });
+  }
+  
 }
