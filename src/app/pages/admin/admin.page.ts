@@ -11,23 +11,27 @@ import { NodeJsExpressService } from 'src/app/services/node-js-express-service/n
   styleUrls: ['./admin.page.scss'],
 })
 export class AdminPage implements OnInit {
-
   recipes: Recipe[] = [];
 
-  constructor(private modalCtrl: ModalController, private nodeJsExpressService: NodeJsExpressService) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private nodeJsExpressService: NodeJsExpressService
+  ) {}
 
   ngOnInit() {
     this.getRecipies();
   }
 
   getRecipies() {
-    this.nodeJsExpressService.getAll().subscribe((data) => {
-      this.recipes = data;
-      console.log(this.recipes);
-    },
-    error =>{
-      console.log(error);
-    });
+    this.nodeJsExpressService.getAll().subscribe(
+      (data) => {
+        this.recipes = data;
+        console.log(this.recipes);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   async create() {
@@ -39,13 +43,23 @@ export class AdminPage implements OnInit {
     await modal.present();
   }
 
-  async update() {
+  async update(recipe: any) {
+    console.log("this is recipe", recipe);
     const modal = await this.modalCtrl.create({
       component: AdminUpdateRecipeModalPage,
       cssClass: 'admin-modal',
+      componentProps: {
+        'recipe': recipe,
+      },
     });
 
     await modal.present();
+
+    const { data } = await modal.onWillDismiss();  // Få det opdaterede recipe objekt
+    if (data) {
+      const index = this.recipes.findIndex(r => r.id === data.id);  // Find indexet for det opdaterede recipe objekt i recipes arrayet
+      this.recipes[index] = data;  // Opdater det relevante objekt i recipes arrayet
+    }
   }
 
   getCategoryIcon(category: string | undefined) {

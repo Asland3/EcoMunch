@@ -1,7 +1,7 @@
 <ion-content>
   <div class="page-container">
     <h2>Your meals</h2>
-    <ion-card (click)="update()" *ngFor="let recipe of recipes">
+    <ion-card  *ngFor="let recipe of recipes" (click)="update(recipe)">
       <ion-img
         [src]="recipe.image"
         class="dish-img"

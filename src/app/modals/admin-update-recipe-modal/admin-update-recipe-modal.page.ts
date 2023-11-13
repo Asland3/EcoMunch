@@ -1,7 +1,14 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ModalController } from '@ionic/angular';
+import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
 
 @Component({
   selector: 'app-admin-update-recipe-modal',
@@ -15,19 +22,26 @@ import { ModalController } from '@ionic/angular';
   ],
 })
 export class AdminUpdateRecipeModalPage implements OnInit {
+  @Input() recipe: any;
+  editedRecipe: any;
   imageUrl: string | undefined;
   ingredientInput: string = '';
   addedIngredients: string[] = [];
   isSearchBarFocused = false;
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private nodeJsExpressService: NodeJsExpressService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.editedRecipe = { ...this.recipe };
+    this.editedRecipe.ingredientsWithMeasurements = JSON.parse(this.recipe.ingredientsWithMeasurements);
+  }
 
   closeModal() {
     this.modalCtrl.dismiss();
   }
-
   async openGallery() {
     const image = await Camera.getPhoto({
       quality: 90,
@@ -35,23 +49,35 @@ export class AdminUpdateRecipeModalPage implements OnInit {
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    this.imageUrl = 'data:image/jpeg;base64,' + image.base64String;
+    this.editedRecipe.image = 'data:image/jpeg;base64,' + image.base64String;
   }
+
 
   onSearchBarFocus() {
     this.isSearchBarFocused = true;
   }
 
   addIngredient() {
-    this.addedIngredients.push(this.ingredientInput);
+    this.editedRecipe.ingredientsWithMeasurements.push(this.ingredientInput);
     this.ingredientInput = '';
   }
 
   removeIngredient(index: number) {
-    this.addedIngredients.splice(index, 1);
+    this.editedRecipe.ingredientsWithMeasurements.splice(index, 1);
   }
 
-  addNewRecipe() {
-    this.modalCtrl.dismiss();
+
+  updateRecipe() {
+    this.recipe = this.editedRecipe;
+    this.recipe.ingredientsWithMeasurements = JSON.stringify(this.recipe.ingredientsWithMeasurements);
+    this.nodeJsExpressService.update(this.recipe.id, this.recipe).subscribe(
+      (data) => {
+        console.log('Recipe updated successfully');
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    this.modalCtrl.dismiss(this.recipe);
   }
 }
