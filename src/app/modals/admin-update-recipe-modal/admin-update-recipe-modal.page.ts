@@ -36,7 +36,7 @@ export class AdminUpdateRecipeModalPage implements OnInit {
 
   ngOnInit() {
     this.editedRecipe = { ...this.recipe };
-    this.editedRecipe.ingredientsWithMeasurements = JSON.parse(this.recipe.ingredientsWithMeasurements);
+      this.editedRecipe.ingredientsWithMeasurements = this.editedRecipe.ingredientsWithMeasurements.split(", ");
   }
 
   closeModal() {
@@ -52,7 +52,6 @@ export class AdminUpdateRecipeModalPage implements OnInit {
     this.editedRecipe.image = 'data:image/jpeg;base64,' + image.base64String;
   }
 
-
   onSearchBarFocus() {
     this.isSearchBarFocused = true;
   }
@@ -66,10 +65,12 @@ export class AdminUpdateRecipeModalPage implements OnInit {
     this.editedRecipe.ingredientsWithMeasurements.splice(index, 1);
   }
 
-
   updateRecipe() {
+    // Convert array of ingredients to a string
+    this.editedRecipe.ingredientsWithMeasurements =
+      this.editedRecipe.ingredientsWithMeasurements.join(', ');
+
     this.recipe = this.editedRecipe;
-    this.recipe.ingredientsWithMeasurements = JSON.stringify(this.recipe.ingredientsWithMeasurements);
     this.nodeJsExpressService.update(this.recipe.id, this.recipe).subscribe(
       (data) => {
         console.log('Recipe updated successfully');

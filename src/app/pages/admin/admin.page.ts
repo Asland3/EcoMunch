@@ -26,7 +26,6 @@ export class AdminPage implements OnInit {
     this.nodeJsExpressService.getAll().subscribe(
       (data) => {
         this.recipes = data;
-        console.log(this.recipes);
       },
       (error) => {
         console.log(error);
@@ -52,15 +51,21 @@ export class AdminPage implements OnInit {
         'recipe': recipe,
       },
     });
-
+  
     await modal.present();
-
-    const { data } = await modal.onWillDismiss();  // Få det opdaterede recipe objekt
+  
+    const { data } = await modal.onWillDismiss();  // Get the updated recipe object
     if (data) {
-      const index = this.recipes.findIndex(r => r.id === data.id);  // Find indexet for det opdaterede recipe objekt i recipes arrayet
-      this.recipes[index] = data;  // Opdater det relevante objekt i recipes arrayet
+      // Convert ingredients string back to array
+      if (typeof data.ingredientsWithMeasurements === 'string') {
+        data.ingredientsWithMeasurements = data.ingredientsWithMeasurements.split(", ");
+      }
+  
+      const index = this.recipes.findIndex(r => r.id === data.id);  // Find the index of the updated recipe object in the recipes array
+      this.recipes[index] = data;  // Update the relevant object in the recipes array
     }
   }
+  
 
   getCategoryIcon(category: string | undefined) {
     if (category === 'Beef') {

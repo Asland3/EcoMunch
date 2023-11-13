@@ -3,6 +3,7 @@ export class Recipe {
     image?: string;
     name?: string;
     category?: string;
-    ingredientsWithMeasurements?: string;
+    ingredientsWithMeasurements?: string[] | string;
     instructions?: string;
-}
+  }
+  
