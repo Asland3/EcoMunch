@@ -67,14 +67,16 @@ export class HomePage {
     });  
     this.latestmeal();
     this.randomMeals();
+    this.getRecipes();
   }
 
 
-  getRecipies() {
+  getRecipes() {
     this.nodeJsExpressService.getAll().subscribe(
       (data) => {
         this.recipes = data;
       },
+      
       (error) => {
         console.log(error);
       }
