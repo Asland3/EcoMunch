@@ -8,8 +8,8 @@
 
 <ion-content style="background: gray">
   <div class="logo" (click)="openGallery()">
-    <ion-icon *ngIf="!imageUrl" name="images" class="galleryIcon"></ion-icon>
-    <img [src]="imageUrl" *ngIf="imageUrl" class="logo" />
+    <ion-icon *ngIf="!recipe.image" name="images" class="galleryIcon"></ion-icon>
+    <img [src]="recipe.image" *ngIf="recipe.image" class="logo" />
   </div>
 
   <div class="page-container">
@@ -21,6 +21,7 @@
           placeholder="Enter name"
           required="true"
           clearInput="true"
+          [(ngModel)]="recipe.name"
         ></ion-input>
       </ion-item>
     </div>
@@ -33,6 +34,7 @@
           placeholder="Enter category"
           required="true"
           clearInput="true"
+          [(ngModel)]="recipe.category"
         ></ion-input>
       </ion-item>
     </div>
@@ -80,7 +82,8 @@
           label="Instructions"
           labelPlacement="floating"
           placeholder="Enter instructions"
-          rows="5"
+          rows="6"
+          [(ngModel)]="recipe.instructions"
         ></ion-textarea>
       </ion-item>
     </ion-card>

@@ -8,6 +8,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
+import { Recipe } from 'src/app/models/recipe.model';
 
 @Component({
   selector: 'app-admin-add-recipe-modal',
@@ -25,10 +27,18 @@ export class AdminAddRecipeModalPage implements OnInit {
   ingredientInput: string = '';
   addedIngredients: string[] = [];
   isSearchBarFocused = false;
+  recipe: Recipe;
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private nodeJsExpressService: NodeJsExpressService
+  ) {
+    this.recipe = new Recipe();
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.recipe = new Recipe();
+  }
 
   closeModal() {
     this.modalCtrl.dismiss();
@@ -41,7 +51,7 @@ export class AdminAddRecipeModalPage implements OnInit {
       resultType: CameraResultType.Base64,
       source: CameraSource.Photos,
     });
-    this.imageUrl = 'data:image/jpeg;base64,' + image.base64String;
+    this.recipe.image = 'data:image/jpeg;base64,' + image.base64String;
   }
 
   onSearchBarFocus() {
@@ -58,6 +68,14 @@ export class AdminAddRecipeModalPage implements OnInit {
   }
 
   addNewRecipe() {
+    this.nodeJsExpressService.create(this.recipe).subscribe(
+      (data) => {
+        console.log('Recipe added successfully');
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
     this.modalCtrl.dismiss();
   }
 }
