@@ -73,9 +73,6 @@ export class AdminUpdateRecipeModalPage implements OnInit {
 
     this.recipe = this.editedRecipe;
     this.nodeJsExpressService.update(this.recipe.id, this.recipe).subscribe(
-      (data) => {
-        console.log('Recipe updated successfully');
-      },
       (error) => {
         console.log(error);
       }
