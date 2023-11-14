@@ -40,6 +40,20 @@ export class AdminUpdateRecipeModalPage implements OnInit {
     this.editedRecipe.ingredientsWithMeasurements = this.editedRecipe.ingredientsWithMeasurements.split(", ");
   }
 
+  deleteRecipe() {
+    this.nodeJsExpressService.delete(this.recipe.id).subscribe(
+      (data) => {
+        this.recipe = data;
+        this.showToast('Recipe deleted successfully');
+        this.modalCtrl.dismiss(this.recipe);
+      },
+      (error) => {
+        console.log(error);
+        this.showToast('Error deleting recipe');
+      }
+    );
+  }
+
   closeModal() {
     this.modalCtrl.dismiss();
   }

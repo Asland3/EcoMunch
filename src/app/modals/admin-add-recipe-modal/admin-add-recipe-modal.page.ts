@@ -28,6 +28,7 @@ export class AdminAddRecipeModalPage implements OnInit {
   isSearchBarFocused = false;
   recipe: Recipe;
   recipes: Recipe[] = [];
+  imageUrl!: string;
 
   constructor(
     private modalCtrl: ModalController,
@@ -48,10 +49,16 @@ export class AdminAddRecipeModalPage implements OnInit {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.Uri,
+      resultType: CameraResultType.DataUrl,
       source: CameraSource.Photos,
     });
-    this.recipe.image = image.webPath;
+
+    if (image.dataUrl) {
+      const response = await fetch(image.dataUrl);
+      const blob = await response.blob();
+      this.imageUrl = URL.createObjectURL(blob);
+      this.recipe.image = blob;
+    }
   }
 
   onSearchBarFocus() {

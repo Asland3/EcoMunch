@@ -9,7 +9,7 @@
 <ion-content style="background: gray">
   <div class="logo" (click)="openGallery()">
     <ion-icon *ngIf="!recipe.image" name="images" class="galleryIcon"></ion-icon>
-    <img [src]="recipe.image" *ngIf="recipe.image" class="logo" />
+    <img [src]="imageUrl" *ngIf="recipe.image" class="logo" />
   </div>
 
   <div class="page-container">

@@ -41,7 +41,7 @@ export class AdminPage implements OnInit {
     await modal.present();
   
     modal.onWillDismiss().then(() => {
-      this.getRecipes();
+      this.getRecipe();
     });
 
     const { data } = await modal.onWillDismiss();
