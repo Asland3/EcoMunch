@@ -58,6 +58,10 @@ const routes: Routes = [
     path: 'admin-update-recipe-modal',
     loadChildren: () => import('./modals/admin-update-recipe-modal/admin-update-recipe-modal.module').then( m => m.AdminUpdateRecipeModalPageModule)
   },
+  {
+    path: 'created-dish-details-modal',
+    loadChildren: () => import('./modals/created-dish-details-modal/created-dish-details-modal/created-dish-details-modal.module').then( m => m.CreatedDishDetailsModalPageModule)
+  },
 
 ];
 

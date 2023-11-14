@@ -1,6 +1,6 @@
 export class Recipe {
     id?: any;
-    image?: Blob;
+    image?: string;
     name?: string;
     category?: string;
     ingredientsWithMeasurements?: string[] | string;

@@ -1,7 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
     const Recipe = sequelize.define("recipes", {
       image: {
-        type: Sequelize.BLOB('long')
+        type: Sequelize.TEXT('long')
       },
       name: {
         type: Sequelize.STRING

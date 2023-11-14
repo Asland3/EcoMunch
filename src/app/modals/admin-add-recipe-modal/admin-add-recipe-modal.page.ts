@@ -52,15 +52,15 @@ export class AdminAddRecipeModalPage implements OnInit {
       resultType: CameraResultType.DataUrl,
       source: CameraSource.Photos,
     });
-
+  
     if (image.dataUrl) {
-      const response = await fetch(image.dataUrl);
-      const blob = await response.blob();
-      this.imageUrl = URL.createObjectURL(blob);
-      this.recipe.image = blob;
-      console.log("this is blob", this.recipe.image);
+      // Directly assign the base64 string to this.recipe.image
+      this.recipe.image = image.dataUrl;
     }
   }
+  
+  
+  
 
   onSearchBarFocus() {
     this.isSearchBarFocused = true;
@@ -98,4 +98,6 @@ export class AdminAddRecipeModalPage implements OnInit {
       }
     );
   }
+  
+  
 }

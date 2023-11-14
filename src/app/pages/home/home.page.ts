@@ -14,6 +14,7 @@ import { HttpClient } from '@angular/common/http';
 import { DishDetailsModalPage } from 'src/app/modals/dish-details-modal/dish-details-modal.page';
 import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
 import { Recipe } from 'src/app/models/recipe.model';
+import { CreatedDishDetailsModalPage } from 'src/app/modals/created-dish-details-modal/created-dish-details-modal/created-dish-details-modal.page';
 
 @Component({
   selector: 'app-home',
@@ -95,6 +96,18 @@ export class HomePage {
   
     modal.onDidDismiss().then(() => {
       this.getFavorites();
+    });
+  
+    await modal.present();
+  }
+
+  async createdDishDetailsModal(recipe: any) {
+    const modal = await this.modalCtrl.create({
+      component: CreatedDishDetailsModalPage,
+      cssClass: 'dish-detail-modal',
+      componentProps: {
+        'recipe': recipe,
+      }
     });
   
     await modal.present();

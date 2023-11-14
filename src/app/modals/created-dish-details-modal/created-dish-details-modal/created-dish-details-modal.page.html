@@ -1,0 +1,24 @@
+<ion-toolbar color="white" [translucent]="true">
+  <ion-buttons slot="end">
+    <ion-button color="primary" (click)="closeModal()">
+      <ion-icon name="close-outline" size="large"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content>
+  <swiper-container>
+    <swiper-slide>
+      <ion-img class="logo" src="https://img.freepik.com/free-photo/big-sandwich-hamburger-with-juicy-beef-burger-cheese-tomato-red-onion-wooden-table_2829-19631.jpg"></ion-img>
+      <h1 class="ion-text-center" style="color: black">{{ recipe.name }}</h1>
+      <p>{{ recipe.ingredientsWithMeasurements }}</p>
+      <ion-icon name="arrow-forward-circle" class="swipe-arrow"></ion-icon>
+    </swiper-slide>
+
+    <swiper-slide class="ion-padding">
+      <ion-img class="logo" src="https://img.freepik.com/free-photo/big-sandwich-hamburger-with-juicy-beef-burger-cheese-tomato-red-onion-wooden-table_2829-19631.jpg"></ion-img>
+      <h1 class="ion-text-center" style="color: black">{{ recipe.name }}</h1>
+      <p [innerHTML]="formatInstructions(recipe.instructions)"></p>
+    </swiper-slide>
+  </swiper-container>
+</ion-content>

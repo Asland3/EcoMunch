@@ -15,10 +15,10 @@ const db = require("./app/models");
 db.sequelize.sync();
 
 // parse requests of content-type - application/json
-app.use(bodyParser.json());
+app.use(express.json({ limit: '50mb' }));
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // simple route
 app.get("/", (req, res) => {

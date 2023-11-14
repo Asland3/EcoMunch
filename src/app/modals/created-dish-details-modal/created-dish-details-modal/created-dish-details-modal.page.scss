@@ -1,0 +1,29 @@
+.logo {
+    overflow: hidden;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+    width: 80%;
+}
+
+.swipe-arrow {
+    position: fixed;
+    right: 10px;
+    top: 60%;
+    font-size: 30px;
+    animation: slide 3s infinite;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(10px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
