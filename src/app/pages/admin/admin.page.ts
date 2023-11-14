@@ -19,10 +19,10 @@ export class AdminPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getRecipies();
+    this.getRecipes();
   }
 
-  getRecipies() {
+  getRecipes() {
     this.nodeJsExpressService.getAll().subscribe(
       (data) => {
         this.recipes = data;
@@ -38,13 +38,18 @@ export class AdminPage implements OnInit {
       component: AdminAddRecipeModalPage,
       cssClass: 'admin-modal',
     });
-
+  
     await modal.present();
-    
-    const { data } = await modal.onWillDismiss();  // Få det opdaterede recipe objekt
+  
+    modal.onWillDismiss().then(() => {
+      this.getRecipes();
+    });
+
+    const { data } = await modal.onWillDismiss();
     if (data) {
-      const index = this.recipes.findIndex(r => r.id === data.id);  // Find indexet for det opdaterede recipe objekt i recipes arrayet
-      this.recipes[index] = data;  // Opdater det relevante objekt i recipes arrayet
+      if (typeof data.ingredientsWithMeasurements === 'string') {
+        data.ingredientsWithMeasurements = data.ingredientsWithMeasurements.split(", ");
+      }
     }
   }
 
@@ -59,15 +64,14 @@ export class AdminPage implements OnInit {
   
     await modal.present();
   
-    const { data } = await modal.onWillDismiss();  // Get the updated recipe object
+    const { data } = await modal.onWillDismiss();
     if (data) {
-      // Convert ingredients string back to array
       if (typeof data.ingredientsWithMeasurements === 'string') {
         data.ingredientsWithMeasurements = data.ingredientsWithMeasurements.split(", ");
       }
   
-      const index = this.recipes.findIndex(r => r.id === data.id);  // Find the index of the updated recipe object in the recipes array
-      this.recipes[index] = data;  // Update the relevant object in the recipes array
+      const index = this.recipes.findIndex(r => r.id === data.id);
+      this.recipes[index] = data;
     }
   }
   

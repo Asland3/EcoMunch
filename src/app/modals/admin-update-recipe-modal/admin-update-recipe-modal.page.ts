@@ -7,7 +7,7 @@ import {
 } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
 
 @Component({
@@ -31,12 +31,13 @@ export class AdminUpdateRecipeModalPage implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private nodeJsExpressService: NodeJsExpressService
+    private nodeJsExpressService: NodeJsExpressService,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
     this.editedRecipe = { ...this.recipe };
-      this.editedRecipe.ingredientsWithMeasurements = this.editedRecipe.ingredientsWithMeasurements.split(", ");
+    this.editedRecipe.ingredientsWithMeasurements = this.editedRecipe.ingredientsWithMeasurements.split(", ");
   }
 
   closeModal() {
@@ -66,17 +67,29 @@ export class AdminUpdateRecipeModalPage implements OnInit {
     this.editedRecipe.ingredientsWithMeasurements.splice(index, 1);
   }
 
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+    });
+    toast.present();
+  }
+
   updateRecipe() {
-    // Convert array of ingredients to a string
     this.editedRecipe.ingredientsWithMeasurements =
       this.editedRecipe.ingredientsWithMeasurements.join(', ');
-
+  
     this.recipe = this.editedRecipe;
     this.nodeJsExpressService.update(this.recipe.id, this.recipe).subscribe(
+      (data) => {
+        this.recipe = data;
+        this.showToast('Recipe updated successfully');
+        this.modalCtrl.dismiss(this.recipe);
+      },
       (error) => {
         console.log(error);
+        this.showToast('Error updating recipe');
       }
     );
-    this.modalCtrl.dismiss(this.recipe);
-  }
+  } 
 }

@@ -23,7 +23,6 @@ import { Recipe } from 'src/app/models/recipe.model';
   ],
 })
 export class AdminAddRecipeModalPage implements OnInit {
-  imageUrl: string | undefined;
   ingredientInput: string = '';
   addedIngredients: string[] = [];
   isSearchBarFocused = false;
@@ -39,8 +38,6 @@ export class AdminAddRecipeModalPage implements OnInit {
   }
 
   ngOnInit() {
-    this.recipe = new Recipe();
-    this.refreshRecipes();
   }
 
   closeModal() {
@@ -79,26 +76,16 @@ export class AdminAddRecipeModalPage implements OnInit {
   }
 
   addNewRecipe() {
+    this.recipe.ingredientsWithMeasurements = this.addedIngredients.join(', ');
     this.nodeJsExpressService.create(this.recipe).subscribe(
       (data) => {
+        this.recipe = data;
         this.showToast('Recipe added successfully');
-        this.refreshRecipes();
+        this.modalCtrl.dismiss(this.recipe);
       },
       (error) => {
         console.log(error);
         this.showToast('An error occurred when trying to add a new recipe');
-      }
-    );
-    this.modalCtrl.dismiss(this.recipe);
-  }
-
-  refreshRecipes() {
-    this.nodeJsExpressService.getAll().subscribe(
-      (data) => {
-        this.recipes = data; 
-      },
-      (error) => {
-        console.log(error);
       }
     );
   }
