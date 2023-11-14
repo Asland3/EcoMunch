@@ -19,18 +19,17 @@ export class AdminPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getRecipes();
+    this.getRecipe();
   }
 
-  getRecipes() {
-    this.nodeJsExpressService.getAll().subscribe(
-      (data) => {
-        this.recipes = data;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  getRecipe() {
+    this.nodeJsExpressService.getAll().subscribe((data) => {
+      this.recipes = data;
+      console.log(this.recipes);
+    },
+    error =>{
+      console.log(error);
+    });
   }
 
   async create() {
