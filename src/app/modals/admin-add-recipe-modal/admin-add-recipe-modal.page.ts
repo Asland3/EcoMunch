@@ -75,10 +75,20 @@ export class AdminAddRecipeModalPage implements OnInit {
     this.addedIngredients.splice(index, 1);
   }
 
-  async showToast(message: string) {
+  async showToastSucces(message: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000,
+      color: 'success',
+    });
+    toast.present();
+  }
+
+  async showToastError(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: 'danger',
     });
     toast.present();
   }
@@ -89,12 +99,12 @@ export class AdminAddRecipeModalPage implements OnInit {
       (data) => {
         console.log(data)
         this.recipe = data;
-        this.showToast('Recipe added successfully');
+        this.showToastSucces('Recipe added successfully');
         this.modalCtrl.dismiss(this.recipe);
       },
       (error) => {
         console.log(error);
-        this.showToast('An error occurred when trying to add a new recipe');
+        this.showToastError('An error occurred when trying to add a new recipe');
       }
     );
   }
