@@ -245,6 +245,7 @@
 
       <div>
         <h2>Your meals</h2>
+        <p *ngIf="recipes.length === 0">There is no recipes added yet</p>
         <ion-card
           *ngFor="let recipe of recipes"
           (click)="createdDishDetailsModal(recipe)"
