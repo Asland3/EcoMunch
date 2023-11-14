@@ -130,20 +130,20 @@ export class AdminUpdateRecipeModalPage implements OnInit {
   }
 
   updateRecipe() {
+    // Convert array of ingredients to a string
     this.editedRecipe.ingredientsWithMeasurements =
       this.editedRecipe.ingredientsWithMeasurements.join(', ');
 
     this.recipe = this.editedRecipe;
     this.nodeJsExpressService.update(this.recipe.id, this.recipe).subscribe(
-      (data) => {
-        this.recipe = data;
+      () => {
         this.showToastSucces('Recipe updated successfully');
-        this.modalCtrl.dismiss(this.recipe);
       },
       (error) => {
         console.log(error);
         this.showToastError('Error updating recipe');
       }
     );
+    this.modalCtrl.dismiss(this.recipe);
   }
 }
