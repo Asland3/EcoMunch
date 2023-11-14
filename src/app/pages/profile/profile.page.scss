@@ -1,46 +1,47 @@
 ion-avatar {
-    width: 110px;
-    height: 110px;
+  width: 110px;
+  height: 110px;
 }
 
 .gray-toolbar {
-    --background: #f4f4f4 !important;
+  --background: #f4f4f4 !important;
 }
 
-.favorite-dish-container {
-    .dish-title-padding {
-        padding-left: 15px;
-    }
+// Card styling
+.card-image-container {
+  position: relative;
+}
+.favorite-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+ion-card {
+  position: relative;
+}
 
-    .favorite-dish-card {
-        margin-top: 0px;
-    }
+.dish-img {
+  width: 100%;
+  height: 140px;
+  border-radius: 10px;
+  object-fit: cover;
+  overflow: hidden;
+}
 
-    .dish-name-text {
-        color: black !important;
-    }
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
 
-    .rounded-dish-img {
-        overflow: hidden;
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-    }
+.category {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 5px;
 
-    .dish-bg-color {
-        background-color: #f4f4f4;
-    }
-
-    .full-height {
-        height: 100%;
-    }
-
-    .favorite-icon-position {
-        position: absolute;
-        right: 0;
-    }
-
-    .truncate {
-        word-break: break-word;
-    }
+  ion-label {
+    margin-right: 5px;
+  }
 }

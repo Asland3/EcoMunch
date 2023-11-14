@@ -1,6 +1,10 @@
 import { UserService } from './../../services/user-service/user.service';
 import { Component } from '@angular/core';
-import { ModalController, NavController, ToastController } from '@ionic/angular';
+import {
+  ModalController,
+  NavController,
+  ToastController,
+} from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { MealService } from 'src/app/services/meal-service/meal.service';
 import {
@@ -14,7 +18,7 @@ import { HttpClient } from '@angular/common/http';
 import { DishDetailsModalPage } from 'src/app/modals/dish-details-modal/dish-details-modal.page';
 import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
 import { Recipe } from 'src/app/models/recipe.model';
-import { CreatedDishDetailsModalPage } from 'src/app/modals/created-dish-details-modal/created-dish-details-modal/created-dish-details-modal.page';
+import { CreatedDishDetailsModalPage } from 'src/app/modals/created-dish-details-modal/created-dish-details-modal.page';
 
 @Component({
   selector: 'app-home',
@@ -44,7 +48,8 @@ export class HomePage {
   ingredients: string[] = []; // All available ingredients
   filteredIngredients: string[] = []; // Ingredients that match the user's input
   recipes: Recipe[] = [];
-  
+  loaderArray = new Array(3).fill(0);
+
   constructor(
     private navCtrl: NavController,
     private mealService: MealService,
@@ -63,21 +68,24 @@ export class HomePage {
         await this.getFavorites();
       }
     });
-    this.http.get<{meals: {idIngredient: string, strIngredient: string}[]}>('../../../assets/ingredients.json').subscribe((data) => {
-      this.ingredients = data.meals.map(meal => meal.strIngredient);
-    });  
+    this.http
+      .get<{ meals: { idIngredient: string; strIngredient: string }[] }>(
+        '../../../assets/ingredients.json'
+      )
+      .subscribe((data) => {
+        this.ingredients = data.meals.map((meal) => meal.strIngredient);
+      });
     this.latestmeal();
     this.randomMeals();
     this.getRecipes();
   }
-
 
   getRecipes() {
     this.nodeJsExpressService.getAll().subscribe(
       (data) => {
         this.recipes = data;
       },
-      
+
       (error) => {
         console.log(error);
       }
@@ -89,15 +97,15 @@ export class HomePage {
       component: DishDetailsModalPage,
       cssClass: 'dish-detail-modal',
       componentProps: {
-        'meal': meal,
-        'userIngredients': this.userIngredients
-      }
+        meal: meal,
+        userIngredients: this.userIngredients,
+      },
     });
-  
+
     modal.onDidDismiss().then(() => {
       this.getFavorites();
     });
-  
+
     await modal.present();
   }
 
@@ -106,13 +114,13 @@ export class HomePage {
       component: CreatedDishDetailsModalPage,
       cssClass: 'dish-detail-modal',
       componentProps: {
-        'recipe': recipe,
-      }
+        recipe: recipe,
+      },
     });
-  
+
     await modal.present();
   }
-  
+
   async searchMeals() {
     this.isLoading = true;
     this.showSearchResults = true;
@@ -131,22 +139,22 @@ export class HomePage {
 
   getItems(ev: any) {
     const val = ev.target.value;
-  
+
     if (val && val.trim() !== '') {
       this.filteredIngredients = this.ingredients.filter((item) => {
-        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+        return item.toLowerCase().indexOf(val.toLowerCase()) > -1;
       });
     } else {
       this.filteredIngredients = [];
     }
   }
-  
+
   selectIngredient(ingredient: string) {
     this.newIngredient = ingredient;
     this.addUserIngredient(ingredient);
     this.filteredIngredients = [];
   }
-  
+
   addUserIngredient(ingredient: string) {
     if (ingredient && !this.userIngredients.includes(ingredient)) {
       this.userIngredients.push(ingredient);

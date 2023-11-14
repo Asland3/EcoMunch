@@ -74,80 +74,35 @@ ion-searchbar {
   margin-bottom: 5px;
 }
 
-// .meal-dish-container {
-//     .dish-title-padding {
-//         padding-left: 15px;
-//     }
-
-//     .meal-dish-card {
-//         margin-top: 0px;
-//     }
-
-//     .dish-name-text {
-//         color: black !important;
-//     }
-
-//     .rounded-dish-img {
-//         overflow: hidden;
-//         width: 140px;
-//         height: 140px;
-//         border-radius: 50%;
-//     }
-
-//     .dish-bg-color {
-//         background-color: #f4f4f4;
-//     }
-
-//     .full-height {
-//         height: 100%;
-//     }
-
-//     .truncate {
-//         word-break: break-word;
-//     }
-
-// }
-
 .loadcard {
   border-radius: 8%;
   --background: #f4f4f4;
 }
 
 .skeleton-image {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  align-self: center;
+  width: 100%;
+  height: 150px;
+  margin-bottom: 8px;
 }
 
 .skeleton-title {
-  width: 100%;
-  height: 30px;
-  margin-top: 8px;
-  border-radius: 3%;
-}
-
-.skeleton-heart {
-  width: 30px;
-  height: 30px;
-  align-self: flex-end;
+  margin-bottom: 8px;
+  height: 16px;
+  width: 80%;
   margin-left: auto;
-  margin-right: 10px;
-  margin-bottom: 10;
-  border-radius: 5%;
+  margin-right: auto;
 }
 
+// Card styling
 .card-image-container {
-    position: relative;
-  }
-
+  position: relative;
+}
 .favorite-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
-  }
-
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
 ion-card {
   position: relative;
 }
@@ -175,4 +130,10 @@ h3 {
   ion-label {
     margin-right: 5px;
   }
+}
+.ingredients {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 5px;
 }
