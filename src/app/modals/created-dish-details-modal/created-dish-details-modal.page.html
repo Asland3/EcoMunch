@@ -1,0 +1,37 @@
+<ion-toolbar color="white" [translucent]="true">
+  <ion-buttons slot="end">
+    <ion-button color="primary" (click)="closeModal()">
+      <ion-icon name="close-outline" size="large"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content>
+  <swiper-container>
+    <swiper-slide>
+      <ion-img
+        class="logo"
+        [src]="recipe.image"
+      ></ion-img>
+      <h1 class="ion-text-center" style="color: black">{{ recipe.name }}</h1>
+
+      <ul>
+        <li *ngFor="let ingredient of ingredientsArray">
+          <p>{{ ingredient }}</p>
+        </li>
+      </ul>
+      
+
+      <ion-icon name="arrow-forward-circle" class="swipe-arrow"></ion-icon>
+    </swiper-slide>
+
+    <swiper-slide class="ion-padding">
+      <ion-img
+        class="logo"
+        [src]="recipe.image"
+      ></ion-img>
+      <h1 class="ion-text-center" style="color: black">{{ recipe.name }}</h1>
+      <p [innerHTML]="formatInstructions(recipe.instructions)"></p>
+    </swiper-slide>
+  </swiper-container>
+</ion-content>

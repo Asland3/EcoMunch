@@ -4,12 +4,18 @@
       <ion-icon name="close-outline" size="large"></ion-icon>
     </ion-button>
   </ion-buttons>
+
+  <ion-buttons slot="start">
+    <ion-button color="primary" (click)="presentDeleteConfirm()">
+      <ion-icon name="trash-outline" size="medium"></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </ion-toolbar>
 
 <ion-content style="background: gray">
   <div class="logo" (click)="openGallery()">
-    <ion-icon *ngIf="!imageUrl" name="images" class="galleryIcon"></ion-icon>
-    <img [src]="imageUrl" *ngIf="imageUrl" class="logo" />
+    <ion-icon *ngIf="!editedRecipe.image" name="images" class="galleryIcon"></ion-icon>
+    <img [src]="editedRecipe.image" *ngIf="editedRecipe.image" class="logo" />
   </div>
 
   <div class="page-container">
@@ -18,9 +24,9 @@
         <ion-label position="floating">Name</ion-label>
         <ion-input
           type="text"
-          placeholder="Enter name"
           required="true"
           clearInput="true"
+          [(ngModel)]="editedRecipe.name" 
         ></ion-input>
       </ion-item>
     </div>
@@ -30,9 +36,9 @@
         <ion-label position="floating">Category</ion-label>
         <ion-input
           type="text"
-          placeholder="Enter category"
           required="true"
           clearInput="true"
+          [(ngModel)]="editedRecipe.category"
         ></ion-input>
       </ion-item>
     </div>
@@ -54,13 +60,12 @@
         <ion-card class="ion-no-margin gray-toolbar height">
           <ion-card-content>
             <ion-chip
-              *ngFor="let ingredient of addedIngredients; let i = index"
-              [@fadeOutIn]
-            >
+            *ngFor="let ingredient of editedRecipe.ingredientsWithMeasurements; let i = index"
+            [@fadeOutIn]
+          > 
               <ion-label>{{ingredient}}</ion-label>
               <ion-icon name="close" (click)="removeIngredient(i)"></ion-icon>
             </ion-chip>
-
             <br />
             <ion-button
               expand="block"
@@ -80,13 +85,14 @@
           label="Instructions"
           labelPlacement="floating"
           placeholder="Enter instructions"
-          rows="5"
+          rows="6"
+          [(ngModel)]="editedRecipe.instructions"
         ></ion-textarea>
       </ion-item>
     </ion-card>
 
-    <ion-button expand="block" (click)="addNewRecipe()"
-      >Add new recipe</ion-button
+    <ion-button expand="block" (click)="updateRecipe()"
+      >Update recipe</ion-button
     >
   </div>
 </ion-content>

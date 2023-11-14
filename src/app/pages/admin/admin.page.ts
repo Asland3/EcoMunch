@@ -11,25 +11,29 @@ import { NodeJsExpressService } from 'src/app/services/node-js-express-service/n
   styleUrls: ['./admin.page.scss'],
 })
 export class AdminPage implements OnInit {
-
   recipes: Recipe[] = [];
   filteredRecipes: Recipe[] = [];
 
-  constructor(private modalCtrl: ModalController, private nodeJsExpressService: NodeJsExpressService) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private nodeJsExpressService: NodeJsExpressService
+  ) {}
 
   ngOnInit() {
     this.getRecipe();
   }
 
   getRecipe() {
-    this.nodeJsExpressService.getAll().subscribe((data) => {
-      this.recipes = data;
-      this.filteredRecipes = data; // Initially display all recipes
-      console.log(this.recipes);
-    },
-    error =>{
-      console.log(error);
-    });
+    this.nodeJsExpressService.getAll().subscribe(
+      (data) => {
+        this.recipes = data;
+        this.filteredRecipes = data; // Initially display all recipes
+        console.log(this.recipes);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   filterRecipes(event: any) {
@@ -47,15 +51,40 @@ export class AdminPage implements OnInit {
     });
 
     await modal.present();
+
+    modal.onWillDismiss().then(() => {
+      this.getRecipe();
+    });
+
+    const { data } = await modal.onWillDismiss();
+    if (data) {
+      if (typeof data.ingredientsWithMeasurements === 'string') {
+        data.ingredientsWithMeasurements =
+          data.ingredientsWithMeasurements.split(', ');
+      }
+    }
   }
 
-  async update() {
+  async update(recipe: any) {
     const modal = await this.modalCtrl.create({
       component: AdminUpdateRecipeModalPage,
       cssClass: 'admin-modal',
+      componentProps: {
+        recipe: recipe,
+      },
     });
 
     await modal.present();
+
+    const { data } = await modal.onWillDismiss();
+    if (data) {
+      if (typeof data.ingredientsWithMeasurements === 'string') {
+        data.ingredientsWithMeasurements =
+          data.ingredientsWithMeasurements.split(', ');
+      }
+      const index = this.recipes.findIndex((r) => r.id === data.id);
+      this.recipes[index] = data;
+    }
   }
 
   getCategoryIcon(category: string | undefined) {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import {
   animate,
   state,
@@ -8,6 +8,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
+import { Recipe } from 'src/app/models/recipe.model';
 
 @Component({
   selector: 'app-admin-add-recipe-modal',
@@ -21,14 +23,23 @@ import {
   ],
 })
 export class AdminAddRecipeModalPage implements OnInit {
-  imageUrl: string | undefined;
   ingredientInput: string = '';
   addedIngredients: string[] = [];
   isSearchBarFocused = false;
+  recipe: Recipe;
+  recipes: Recipe[] = [];
+  imageUrl!: string;
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private nodeJsExpressService: NodeJsExpressService,
+    private toastController: ToastController
+  ) {
+    this.recipe = new Recipe();
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   closeModal() {
     this.modalCtrl.dismiss();
@@ -38,11 +49,18 @@ export class AdminAddRecipeModalPage implements OnInit {
     const image = await Camera.getPhoto({
       quality: 90,
       allowEditing: false,
-      resultType: CameraResultType.Base64,
+      resultType: CameraResultType.DataUrl,
       source: CameraSource.Photos,
     });
-    this.imageUrl = 'data:image/jpeg;base64,' + image.base64String;
+  
+    if (image.dataUrl) {
+      // Directly assign the base64 string to this.recipe.image
+      this.recipe.image = image.dataUrl;
+    }
   }
+  
+  
+  
 
   onSearchBarFocus() {
     this.isSearchBarFocused = true;
@@ -57,7 +75,39 @@ export class AdminAddRecipeModalPage implements OnInit {
     this.addedIngredients.splice(index, 1);
   }
 
-  addNewRecipe() {
-    this.modalCtrl.dismiss();
+  async showToastSucces(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: 'success',
+    });
+    toast.present();
   }
+
+  async showToastError(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: 'danger',
+    });
+    toast.present();
+  }
+
+  addNewRecipe() {
+    this.recipe.ingredientsWithMeasurements = this.addedIngredients.join(', ');
+    this.nodeJsExpressService.create(this.recipe).subscribe(
+      (data) => {
+        console.log(data)
+        this.recipe = data;
+        this.showToastSucces('Recipe added successfully');
+        this.modalCtrl.dismiss(this.recipe);
+      },
+      (error) => {
+        console.log(error);
+        this.showToastError('An error occurred when trying to add a new recipe');
+      }
+    );
+  }
+  
+  
 }
