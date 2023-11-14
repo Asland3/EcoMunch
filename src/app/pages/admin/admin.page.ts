@@ -23,13 +23,15 @@ export class AdminPage implements OnInit {
   }
 
   getRecipe() {
-    this.nodeJsExpressService.getAll().subscribe((data) => {
-      this.recipes = data;
-      console.log(this.recipes);
-    },
-    error =>{
-      console.log(error);
-    });
+    this.nodeJsExpressService.getAll().subscribe(
+      (data) => {
+        this.recipes = data;
+        console.log(this.recipes);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   async create() {
@@ -37,9 +39,9 @@ export class AdminPage implements OnInit {
       component: AdminAddRecipeModalPage,
       cssClass: 'admin-modal',
     });
-  
+
     await modal.present();
-  
+
     modal.onWillDismiss().then(() => {
       this.getRecipe();
     });
@@ -47,7 +49,8 @@ export class AdminPage implements OnInit {
     const { data } = await modal.onWillDismiss();
     if (data) {
       if (typeof data.ingredientsWithMeasurements === 'string') {
-        data.ingredientsWithMeasurements = data.ingredientsWithMeasurements.split(", ");
+        data.ingredientsWithMeasurements =
+          data.ingredientsWithMeasurements.split(', ');
       }
     }
   }
@@ -57,28 +60,22 @@ export class AdminPage implements OnInit {
       component: AdminUpdateRecipeModalPage,
       cssClass: 'admin-modal',
       componentProps: {
-        'recipe': recipe,
+        recipe: recipe,
       },
     });
-  
-    await modal.present();
-  
-    const { data } = await modal.onWillDismiss();
-    
-    if (data?.deleted) {
-      this.getRecipe(); // Dette vil opdatere listen ved at hente data fra serveren igen
-    }
 
+    await modal.present();
+
+    const { data } = await modal.onWillDismiss();
     if (data) {
       if (typeof data.ingredientsWithMeasurements === 'string') {
-        data.ingredientsWithMeasurements = data.ingredientsWithMeasurements.split(", ");
+        data.ingredientsWithMeasurements =
+          data.ingredientsWithMeasurements.split(', ');
       }
-  
-      const index = this.recipes.findIndex(r => r.id === data.id);
+      const index = this.recipes.findIndex((r) => r.id === data.id);
       this.recipes[index] = data;
     }
   }
-  
 
   getCategoryIcon(category: string | undefined) {
     if (category === 'Beef') {

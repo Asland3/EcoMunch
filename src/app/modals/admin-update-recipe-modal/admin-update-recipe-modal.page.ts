@@ -12,7 +12,6 @@ import {
   ModalController,
   ToastController,
 } from '@ionic/angular';
-import { Recipe } from 'src/app/models/recipe.model';
 import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
 
 @Component({
@@ -46,6 +45,7 @@ export class AdminUpdateRecipeModalPage implements OnInit {
     this.editedRecipe.ingredientsWithMeasurements =
       this.editedRecipe.ingredientsWithMeasurements.split(', ');
   }
+  
   async presentDeleteConfirm() {
     const alert = await this.alertController.create({
       header: 'Confirm deletion',
@@ -74,12 +74,12 @@ export class AdminUpdateRecipeModalPage implements OnInit {
   deleteRecipe() {
     this.nodeJsExpressService.delete(this.recipe.id).subscribe(
       () => {
-        this.showToast('Recipe deleted successfully');
+        this.showToastSucces('Recipe deleted successfully');
         this.modalCtrl.dismiss({ deleted: true });
       },
       (error) => {
         console.log(error);
-        this.showToast('Error deleting recipe');
+        this.showToastError('Error deleting recipe');
       }
     );
   }
@@ -111,10 +111,20 @@ export class AdminUpdateRecipeModalPage implements OnInit {
     this.editedRecipe.ingredientsWithMeasurements.splice(index, 1);
   }
 
-  async showToast(message: string) {
+  async showToastSucces(message: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000,
+      color: 'success',
+    });
+    toast.present();
+  }
+
+  async showToastError(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      color: 'danger',
     });
     toast.present();
   }
@@ -127,12 +137,12 @@ export class AdminUpdateRecipeModalPage implements OnInit {
     this.nodeJsExpressService.update(this.recipe.id, this.recipe).subscribe(
       (data) => {
         this.recipe = data;
-        this.showToast('Recipe updated successfully');
+        this.showToastSucces('Recipe updated successfully');
         this.modalCtrl.dismiss(this.recipe);
       },
       (error) => {
         console.log(error);
-        this.showToast('Error updating recipe');
+        this.showToastError('Error updating recipe');
       }
     );
   }
