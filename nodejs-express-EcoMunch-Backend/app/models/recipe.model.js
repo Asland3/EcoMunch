@@ -10,10 +10,10 @@ module.exports = (sequelize, Sequelize) => {
         type: Sequelize.STRING
       },
       ingredientsWithMeasurements : {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT('long')
       },
       instructions : {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT('long')
       },
     });
   
