@@ -13,6 +13,7 @@ import { EventEmitter } from '@angular/core';
 export class CreatedDishDetailsModalPage implements OnInit {
 
   @Input() recipe: any;
+  ingredientsArray: string[] = []; // This will hold the split ingredients
   
   constructor(
     private mealService: MealService,
@@ -24,6 +25,7 @@ export class CreatedDishDetailsModalPage implements OnInit {
 
   ngOnInit() {
     console.log(this.recipe);
+    this.splitIngredients(); // Call the method to split ingredients on initialization
   }
 
 
@@ -38,6 +40,13 @@ export class CreatedDishDetailsModalPage implements OnInit {
       color: 'success',
     });
     toast.present();
+  }
+
+  splitIngredients() {
+    if (this.recipe && this.recipe.ingredientsWithMeasurements) {
+      // Split the ingredients string by comma and trim each ingredient
+      this.ingredientsArray = this.recipe.ingredientsWithMeasurements.split(',').map((ingredient: string) => ingredient.trim());
+    }
   }
 
   getCategoryIcon(category: string | undefined) {

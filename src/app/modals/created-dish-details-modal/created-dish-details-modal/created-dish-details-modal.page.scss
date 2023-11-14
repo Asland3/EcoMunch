@@ -1,10 +1,16 @@
 .logo {
     overflow: hidden;
-    border-radius: 50%;
     display: block;
     margin: 0 auto;
-    width: 80%;
-}
+    width: 330px;
+    height: 155px;
+    border-radius: 10px;
+    background: lightgray;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    object-fit: cover;
+  }
 
 .swipe-arrow {
     position: fixed;
