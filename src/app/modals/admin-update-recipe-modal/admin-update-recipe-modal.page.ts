@@ -7,7 +7,12 @@ import {
 } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { ModalController, ToastController } from '@ionic/angular';
+import {
+  AlertController,
+  ModalController,
+  ToastController,
+} from '@ionic/angular';
+import { Recipe } from 'src/app/models/recipe.model';
 import { NodeJsExpressService } from 'src/app/services/node-js-express-service/node-js-express.service';
 
 @Component({
@@ -32,20 +37,45 @@ export class AdminUpdateRecipeModalPage implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private nodeJsExpressService: NodeJsExpressService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
     this.editedRecipe = { ...this.recipe };
-    this.editedRecipe.ingredientsWithMeasurements = this.editedRecipe.ingredientsWithMeasurements.split(", ");
+    this.editedRecipe.ingredientsWithMeasurements =
+      this.editedRecipe.ingredientsWithMeasurements.split(', ');
+  }
+  async presentDeleteConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Confirm deletion',
+      message: 'Are you sure you want to delete this recipe?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          },
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.deleteRecipe();
+          },
+        },
+      ],
+    });
+
+    await alert.present();
   }
 
   deleteRecipe() {
     this.nodeJsExpressService.delete(this.recipe.id).subscribe(
-      (data) => {
-        this.recipe = data;
+      () => {
         this.showToast('Recipe deleted successfully');
-        this.modalCtrl.dismiss(this.recipe);
+        this.modalCtrl.dismiss({ deleted: true });
       },
       (error) => {
         console.log(error);
@@ -92,7 +122,7 @@ export class AdminUpdateRecipeModalPage implements OnInit {
   updateRecipe() {
     this.editedRecipe.ingredientsWithMeasurements =
       this.editedRecipe.ingredientsWithMeasurements.join(', ');
-  
+
     this.recipe = this.editedRecipe;
     this.nodeJsExpressService.update(this.recipe.id, this.recipe).subscribe(
       (data) => {
@@ -105,5 +135,5 @@ export class AdminUpdateRecipeModalPage implements OnInit {
         this.showToast('Error updating recipe');
       }
     );
-  } 
+  }
 }

@@ -64,6 +64,11 @@ export class AdminPage implements OnInit {
     await modal.present();
   
     const { data } = await modal.onWillDismiss();
+    
+    if (data?.deleted) {
+      this.getRecipe(); // Dette vil opdatere listen ved at hente data fra serveren igen
+    }
+
     if (data) {
       if (typeof data.ingredientsWithMeasurements === 'string') {
         data.ingredientsWithMeasurements = data.ingredientsWithMeasurements.split(", ");

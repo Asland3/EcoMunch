@@ -58,6 +58,7 @@ export class AdminAddRecipeModalPage implements OnInit {
       const blob = await response.blob();
       this.imageUrl = URL.createObjectURL(blob);
       this.recipe.image = blob;
+      console.log("this is blob", this.recipe.image);
     }
   }
 
@@ -86,6 +87,7 @@ export class AdminAddRecipeModalPage implements OnInit {
     this.recipe.ingredientsWithMeasurements = this.addedIngredients.join(', ');
     this.nodeJsExpressService.create(this.recipe).subscribe(
       (data) => {
+        console.log(data)
         this.recipe = data;
         this.showToast('Recipe added successfully');
         this.modalCtrl.dismiss(this.recipe);
