@@ -111,6 +111,22 @@ ion-toolbar {
     height: 95%;
 }
 
+
+
+// Global searchbar related Styling
+ion-searchbar{
+    .searchbar-search-icon.sc-ion-searchbar-ios{
+        color: var(--ion-color-primary);
+    }
+}
+
+
+
+
+
+
+
+
 @font-face {
     font-family: 'Jost', serif;
     src: url('https://fonts.googleapis.com/css?family=Italiana|Jost&display=swap');
