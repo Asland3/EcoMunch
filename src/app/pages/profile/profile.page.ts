@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController, NavController, ToastController } from '@ionic/angular';
 import { LogoutConfirmationModalPage } from '../../modals/logout-confirmation-modal/logout-confirmation-modal.page';
 import { UpdateUserModalPage } from '../../modals/update-user-modal/update-user-modal.page';
 import { AuthService } from '../../services/auth-service/auth.service';
@@ -36,7 +36,8 @@ export class ProfilePage {
     private authService: AuthService,
     private modalCtrl: ModalController,
     private userService: UserService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {
@@ -46,6 +47,11 @@ export class ProfilePage {
         await this.getFavorites();
       }
     });
+    this.authService.updateUserData();
+  }
+
+  navigateAdmin() {
+    this.navCtrl.navigateForward('/tabs/home/profile/admin');
   }
 
   async getFavorites() {

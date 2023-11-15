@@ -112,7 +112,8 @@ export class AuthService {
           name: name,
           email: email,
           photoURL: photoURL,
-        });
+        }, 
+        { merge: true });
       }
       return user;
     } catch (error) {

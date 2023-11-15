@@ -21,16 +21,19 @@
   <div class="page-container">
     <ion-card style="background-color: #f4f4f4">
       <ion-toolbar class="gray-toolbar">
+        <ion-buttons *ngIf="user?.admin" slot="start">
+          <ion-button fill="clear" (click)="navigateAdmin()" >
+            <ion-icon size="medium" color="primary" name="person-circle-outline"></ion-icon>
+            <ion-label>Admin</ion-label>
+          </ion-button>
+        </ion-buttons>
         <ion-buttons slot="end">
           <ion-button fill="clear" (click)="updateUser()">
-            <ion-icon
-              size="medium"
-              color="primary"
-              name="create-outline"
-            ></ion-icon>
+            <ion-icon size="medium" color="primary" name="create-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
+      
 
       <ion-grid>
         <ion-row class="ion-justify-content-center">
