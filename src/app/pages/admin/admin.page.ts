@@ -38,11 +38,10 @@ export class AdminPage implements OnInit {
 
   filterRecipes(event: any) {
     const searchTerm = (event.detail.value || '').toLowerCase(); // Getting the search term
-    this.filteredRecipes = this.recipes.filter(recipe =>
-      recipe.name && recipe.name.toLowerCase().includes(searchTerm)
+    this.filteredRecipes = this.recipes.filter(
+      (recipe) => recipe.name && recipe.name.toLowerCase().includes(searchTerm)
     );
   }
-
 
   async create() {
     const modal = await this.modalCtrl.create({
@@ -52,9 +51,9 @@ export class AdminPage implements OnInit {
 
     await modal.present();
 
-    modal.onWillDismiss().then(() => {
-      this.getRecipe();
-    });
+    // modal.onWillDismiss().then(() => {
+    //   this.getRecipe();
+    // });
 
     const { data } = await modal.onWillDismiss();
     if (data) {
@@ -62,6 +61,7 @@ export class AdminPage implements OnInit {
         data.ingredientsWithMeasurements =
           data.ingredientsWithMeasurements.split(', ');
       }
+      this.getRecipe();
     }
   }
 
@@ -77,11 +77,18 @@ export class AdminPage implements OnInit {
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
+
+    if (data?.deleted) {
+      this.getRecipe(); // Dette vil opdatere listen ved at hente data fra serveren igen
+    }
+
     if (data) {
       if (typeof data.ingredientsWithMeasurements === 'string') {
         data.ingredientsWithMeasurements =
           data.ingredientsWithMeasurements.split(', ');
       }
+
+      // this.recipes.push(data);
       const index = this.recipes.findIndex((r) => r.id === data.id);
       this.recipes[index] = data;
     }
